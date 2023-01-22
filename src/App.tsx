@@ -1,62 +1,51 @@
 import React, { useState } from 'react';
 import { Client } from "colyseus.js";
+import { PasswordForm } from './PasswordForm';
+import AddGame from './GameCreateForm';
 
-interface Game {
+interface Room {
   name: string;
   players: string[];
 }
 
-const client = new Client("ws://localhost:2567");
-const room = client.join('game_room');
+interface Props {
+  initialGames: Room[]
+}
 
-const GamesList: React.FC<{ games: Game[] }> = () => {
+const GamesList: React.FC<Props> = ({initialGames}) => {
 
+  const [games, setGames] = useState<Room[]>(initialGames);
 
-  const [games, setGames] = useState<Game[]>(initialGames);
-
-  const [password, setPassword] = useState('titi');
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 
   const [newGameName, setNewGameName] = useState('');
 
-  const handlePasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (password === 'titi') {
-      setIsPasswordCorrect(true);
-      console.log('Correct password submitted!');
-    } else {
-      console.log('Incorrect password submitted.');
-    }
+
+  const handlePasswordSubmit = (isCorrect: boolean) => {
+    setIsPasswordCorrect(isCorrect);
   };
 
-  const joinGame = (game: Game) => {
+  const joinGame = (game: Room) => {
     const updatedGame = { ...game, players: [...game.players, 'current user'] };
     setGames(games.map((g) => (g.name === game.name ? updatedGame : g)));
   };
 
-  const deleteGame = (game: Game) => {
+  const deleteGame = (game: Room) => {
     setGames(games.filter((g) => g.name !== game.name));
   };
 
-  const addGame = () => {
-    const newGame: Game = { name: newGameName, players: [] };
+  
+  const handleAddGame = (name: string) => {
+    const newGame: Room = { name, players: [] };
     setGames([...games, newGame]);
-    setNewGameName('');
   };
 
   return (
     <div>
       {!isPasswordCorrect ? (
-        <form onSubmit={handlePasswordSubmit}>
-          <label htmlFor="password">Please enter the password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <button type="submit">Submit</button>
-        </form>
+        
+          <PasswordForm onPasswordSubmit={setIsPasswordCorrect}/>
+        
       ) : (
         <div>
           <h2>Games</h2>
@@ -72,26 +61,16 @@ const GamesList: React.FC<{ games: Game[] }> = () => {
               </button>
             </div>
           ))}
-          <h2>Add new game</h2>
-          <label htmlFor="newGameName">Name:</label>
-          <input
-            type="text"
-            id="newGameName"
-            defaultValue=""
-            onChange={(event) => setNewGameName(event.target.value)}
-          />
-          <button type="button" onClick={addGame}>
-            Create game
-          </button>
+          <AddGame onAdd={handleAddGame}/>
         </div>
+      )
 
-
-      )}
+      }
     </div>
   );
 };
 
-const initialGames: Game[] = [
+const initialGames: Room[] = [
   {
     name: 'Game 1',
     players: ['Player 1', 'Player 2'],
@@ -106,7 +85,7 @@ const App: React.FC = () => {
   // @ts-ignore
   return (
     <div>
-      <GamesList games={initialGames} />
+      <GamesList initialGames={initialGames} />
     </div>
   );
 };
