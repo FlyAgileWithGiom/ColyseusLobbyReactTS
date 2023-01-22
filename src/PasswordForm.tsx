@@ -7,6 +7,7 @@ interface Props {
 export const PasswordForm: React.FC<Props> = ({ onPasswordSubmit }) => {
   const [password, setPassword] = useState('');
 
+  
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const isCorrect = password === 'titi';

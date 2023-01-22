@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Client } from "colyseus.js";
 import { PasswordForm } from './PasswordForm';
-import AddGame from './GameCreateForm';
+import AddRoom from './AddRoom';
+import RoomsList from './RoomsList';
 
 interface Room {
   name: string;
@@ -12,7 +13,7 @@ interface Props {
   initialGames: Room[]
 }
 
-const GamesList: React.FC<Props> = ({initialGames}) => {
+const Lobby: React.FC<Props> = ({initialGames}) => {
 
   const [games, setGames] = useState<Room[]>(initialGames);
 
@@ -20,22 +21,22 @@ const GamesList: React.FC<Props> = ({initialGames}) => {
 
   const [newGameName, setNewGameName] = useState('');
 
+  const [client, setClient] = useState<Client | undefined>(undefined);
 
   const handlePasswordSubmit = (isCorrect: boolean) => {
     setIsPasswordCorrect(isCorrect);
   };
 
-  const joinGame = (game: Room) => {
+  const joinRoom = (game: Room) => {
     const updatedGame = { ...game, players: [...game.players, 'current user'] };
     setGames(games.map((g) => (g.name === game.name ? updatedGame : g)));
   };
 
-  const deleteGame = (game: Room) => {
+  const deleteRoom = (game: Room) => {
     setGames(games.filter((g) => g.name !== game.name));
   };
-
   
-  const handleAddGame = (name: string) => {
+  const addRoom = (name: string) => {
     const newGame: Room = { name, players: [] };
     setGames([...games, newGame]);
   };
@@ -47,22 +48,12 @@ const GamesList: React.FC<Props> = ({initialGames}) => {
           <PasswordForm onPasswordSubmit={setIsPasswordCorrect}/>
         
       ) : (
-        <div>
-          <h2>Games</h2>
-          {games.map((game) => (
-            <div key={game.name}>
-              <h3>{game.name}</h3>
-              <p>Players: {game.players.join(', ')}</p>
-              <button type="button" onClick={() => joinGame(game)}>
-                Join game
-              </button>
-              <button type="button" onClick={() => deleteGame(game)}>
-                Delete game
-              </button>
-            </div>
-          ))}
-          <AddGame onAdd={handleAddGame}/>
-        </div>
+        <RoomsList 
+        rooms={games} 
+        onJoin={joinRoom} 
+        onDelete={deleteRoom} 
+        onAdd={addRoom} 
+      />
       )
 
       }
@@ -81,13 +72,13 @@ const initialGames: Room[] = [
   },
 ];
 
-const App: React.FC = () => {
+const LobbyPage: React.FC = () => {
   // @ts-ignore
   return (
     <div>
-      <GamesList initialGames={initialGames} />
+      <Lobby initialGames={initialGames} />
     </div>
   );
 };
 
-export default App;
+export default LobbyPage;

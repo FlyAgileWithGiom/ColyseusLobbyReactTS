@@ -4,7 +4,7 @@ interface Props {
   onAdd: (name: string) => void;
 }
 
-const AddGame: React.FC<Props> = ({ onAdd }) => {
+const AddRoom: React.FC<Props> = ({ onAdd }) => {
   const [name, setName] = useState('');
 
   const handleAdd = () => {
@@ -28,4 +28,4 @@ const AddGame: React.FC<Props> = ({ onAdd }) => {
   );
 };
 
-export default AddGame;
+export default AddRoom;
