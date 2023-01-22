@@ -1,12 +1,17 @@
-import { Server } from "colyseus";
+import {LobbyRoom, Server} from "colyseus"
+import {RabbitGameRoom} from "./rabbit_room";
 
-const server = new Server({
-  server: process.env.SERVER || "localhost",
-  port: process.env.PORT || 2567,
-});
+const port = parseInt(process.env.PORT, 10) || 3000
 
-server.onShutdown(() => {
-  console.log("Server is shutting down!");
-});
+const gameServer = new Server()
+gameServer.listen(port)
+console.log(`[GameServer] Listening on Port: ${port}`)
 
-server.listen();
+// Expose the "lobby" room.
+gameServer
+    .define("lobby", LobbyRoom);
+
+// Expose your game room with realtime listing enabled.
+gameServer
+    .define("your_game", RabbitGameRoom)
+    .enableRealtimeListing();
