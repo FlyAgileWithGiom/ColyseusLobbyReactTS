@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
 
-interface Props {
-  onAdd: (name: string) => void;
+interface AddRoomProps {
+  onCreateRoom: (name: string) => void;
 }
 
-const AddRoom: React.FC<Props> = ({ onAdd }) => {
-  const [name, setName] = useState('');
+const AddRoom: React.FC<AddRoomProps> = ({ onCreateRoom }) => {
+  const [name, setName] = useState("");
 
-  const handleAdd = () => {
-    onAdd(name);
-    setName('');
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onCreateRoom(name);
+    setName("");
   };
 
   return (
-    <div>
-      <label htmlFor="name">Name:</label>
-      <input
-        type="text"
-        id="name"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-      />
-      <button type="button" onClick={handleAdd}>
-        Add game
-      </button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Room name:
+        <input
+          type="text"
+          value={name}
+          onChange={event => setName(event.target.value)}
+        />
+      </label>
+      <button type="submit">Create</button>
+    </form>
   );
 };
 

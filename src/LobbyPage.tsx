@@ -1,82 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Client } from "colyseus.js";
+import { Client, Room } from "colyseus.js";
 import { PasswordForm } from './PasswordForm';
 import AddRoom from './AddRoom';
 import RoomsList from './RoomsList';
 
-interface Room {
-  name: string;
-  players: string[];
-}
-
-interface Props {
-  initialGames: Room[]
-}
-
-const Lobby: React.FC<Props> = ({initialGames}) => {
-
-  const [games, setGames] = useState<Room[]>(initialGames);
-
-  const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
-
-  const [newGameName, setNewGameName] = useState('');
-
+const Lobby: React.FC<{}> = () => {
   const [client, setClient] = useState<Client | undefined>(undefined);
+  const [lobby, setLobby] = useState<Room | undefined>(undefined);
 
-  const handlePasswordSubmit = (isCorrect: boolean) => {
-    setIsPasswordCorrect(isCorrect);
-  };
+  useEffect(() => {
+    if (client && !lobby) {
+      console.log("joining lobby");
+      
+      client
+        .joinOrCreate("lobby")
+        .then((lobby: Room) => {
+          console.log("lobby joined");
+          
+          setLobby(lobby);
+        });
+    }
+  }, [client, lobby]);
 
-  const joinRoom = (game: Room) => {
-    const updatedGame = { ...game, players: [...game.players, 'current user'] };
-    setGames(games.map((g) => (g.name === game.name ? updatedGame : g)));
-  };
-
-  const deleteRoom = (game: Room) => {
-    setGames(games.filter((g) => g.name !== game.name));
-  };
+  function connectClient() {
+    setClient(new Client(`ws://localhost:3000/colyseus`));
+  }
   
-  const addRoom = (name: string) => {
-    const newGame: Room = { name, players: [] };
-    setGames([...games, newGame]);
+  const onAuthentOk = () => {
+    connectClient();
+    console.log("client created");
+
+    
   };
 
-  return (
-    <div>
-      {!isPasswordCorrect ? (
-        
-          <PasswordForm onPasswordSubmit={setIsPasswordCorrect}/>
-        
-      ) : (
-        <RoomsList 
-        rooms={games} 
-        onJoin={joinRoom} 
-        onDelete={deleteRoom} 
-        onAdd={addRoom} 
-      />
-      )
+  if (!client) {
+    return <PasswordForm onAuthentOk={onAuthentOk} />;
+  }
 
-      }
-    </div>
-  );
+  return client ? (lobby ? <RoomsList client={client} /> : <div>Awaiting Lobby connection...</div>):<div>Connecting...</div>;
 };
 
-const initialGames: Room[] = [
-  {
-    name: 'Game 1',
-    players: ['Player 1', 'Player 2'],
-  },
-  {
-    name: 'Game 2',
-    players: ['Player 3', 'Player 4', 'Player 5'],
-  },
-];
-
 const LobbyPage: React.FC = () => {
-  // @ts-ignore
   return (
     <div>
-      <Lobby initialGames={initialGames} />
+      <Lobby />
     </div>
   );
 };
