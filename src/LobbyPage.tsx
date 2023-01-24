@@ -6,38 +6,23 @@ import RoomsList from './RoomsList';
 
 const Lobby: React.FC<{}> = () => {
   const [client, setClient] = useState<Client | undefined>(undefined);
-  const [lobby, setLobby] = useState<Room | undefined>(undefined);
-
-  useEffect(() => {
-    if (client && !lobby) {
-      console.log("joining lobby");
-      
-      client
-        .joinOrCreate("lobby")
-        .then((lobby: Room) => {
-          console.log("lobby joined");
-          
-          setLobby(lobby);
-        });
-    }
-  }, [client, lobby]);
 
   function connectClient() {
-    setClient(new Client(`ws://localhost:3000/colyseus`));
+    setClient(new Client(`ws://localhost:3000`));
   }
-  
+
   const onAuthentOk = () => {
     connectClient();
     console.log("client created");
 
-    
+
   };
 
   if (!client) {
     return <PasswordForm onAuthentOk={onAuthentOk} />;
   }
 
-  return client ? (lobby ? <RoomsList client={client} /> : <div>Awaiting Lobby connection...</div>):<div>Connecting...</div>;
+  return client ? <RoomsList client={client} /> : <div>Connecting...</div>;
 };
 
 const LobbyPage: React.FC = () => {

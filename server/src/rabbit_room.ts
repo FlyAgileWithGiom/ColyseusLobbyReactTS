@@ -1,21 +1,27 @@
-import { Room, updateLobby } from "colyseus";
+import {Client, Room, updateLobby} from "colyseus";
 
-export class RabbitGameRoom extends Room {
+export class RabbitGame extends Room {
 
-    onCreate() {
+    onCreate(options: any) {
 
-        //
-        // This is just a demonstration
-        // on how to call `updateLobby` from your Room
-        //
+        console.log(`RabbitGame ${options.nick_name} room created!`);
         this.clock.setTimeout(() => {
 
             this.setMetadata({
-                customData: "Hello world!"
+                customData: "Hello world!",
+                nick_name: options.nick_name
             }).then(() => updateLobby(this));
 
         }, 5000);
 
+    }
+
+    onLeave(client: Client, consented?: boolean): void | Promise<any> {
+        console.log(`${this.roomId}: ${client.sessionId} left!`);
+    }
+
+    onJoin(client: Client, options?: any, auth?: any): void | Promise<any> {
+        console.log(`${this.roomId}: ${client.sessionId} joined!`);
     }
 
 }
