@@ -13,5 +13,5 @@ gameServer
 
 // Expose your game room with realtime listing enabled.
 gameServer
-    .define("your_game", RabbitGameRoom)
+    .define("rabbit_game", RabbitGameRoom)
     .enableRealtimeListing();
