@@ -16,14 +16,15 @@ const AddRoom: React.FC<AddRoomProps> = ({onAddRoom}) => {
   return (
       <form onSubmit={handleSubmit}>
         <label>
-        Room name:
-          <input
-              type="text"
-              value={title}
-              onChange={event => setTitle(event.target.value)}
-          />
-      </label>
-      <button type="submit">Create</button>
+            Create Game:
+            <input
+                type="text"
+                value={title}
+                placeholder="game title"
+                onChange={event => setTitle(event.target.value)}
+            />
+        </label>
+          <button type="submit">Create</button>
     </form>
   );
 };

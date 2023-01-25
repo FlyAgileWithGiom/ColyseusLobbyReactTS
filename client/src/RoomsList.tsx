@@ -1,5 +1,5 @@
 import React from 'react';
-import {Room, RoomAvailable} from "colyseus.js";
+import {Room, RoomAvailable} from 'colyseus.js';
 
 interface RoomsListProps {
     availableRooms: RoomAvailable[],
@@ -21,18 +21,30 @@ const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin
     return (
         <div>
             <h2>Available Rooms:</h2>
-            <ul>
+            <table>
+                <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Number of Players</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
                 {availableRooms.map((room) => (
-                    <li key={room.roomId}>
-                        {room.metadata?.title || room.roomId} - {room.clients} Clients
-                        {joinedRoom && joinedRoom.id === room.roomId ? (
-                            <button onClick={handleLeave}>Leave</button>
-                        ) : (
-                             <button onClick={() => handleJoin(room.roomId)}>Join</button>
-                         )}
-                    </li>
+                    <tr key={room.roomId}>
+                        <td>{room.metadata?.title || room.roomId}</td>
+                        <td>{room.clients}</td>
+                        <td>
+                            {joinedRoom && joinedRoom.id === room.roomId ? (
+                                <button onClick={handleLeave}>Leave</button>
+                            ) : (
+                                 <button onClick={() => handleJoin(room.roomId)}>Join</button>
+                             )}
+                        </td>
+                    </tr>
                 ))}
-            </ul>
+                </tbody>
+            </table>
         </div>
     );
 };
