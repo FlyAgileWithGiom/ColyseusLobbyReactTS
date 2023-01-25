@@ -1,18 +1,13 @@
-import {Client, Room, updateLobby} from "colyseus";
+import {Client, Room} from "colyseus";
 
 export class RabbitGame extends Room {
 
-    onCreate(options: any) {
+    onCreate({title}: any) {
 
-        console.log(`RabbitGame ${options.nick_name} room created!`);
-        this.clock.setTimeout(() => {
-
-            this.setMetadata({
-                customData: "Hello world!",
-                nick_name: options.nick_name
-            }).then(() => updateLobby(this));
-
-        }, 5000);
+        console.log(`RabbitGame ${title} room created!`);
+        this.setMetadata({
+            title: title
+        });
 
     }
 
