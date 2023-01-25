@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 interface AddRoomProps {
-  onCreateRoom: (name: string) => void;
+  onAddRoom: (title: string) => void;
 }
 
-const AddRoom: React.FC<AddRoomProps> = ({ onCreateRoom }) => {
-  const [name, setName] = useState("");
+const AddRoom: React.FC<AddRoomProps> = ({onAddRoom}) => {
+  const [title, setTitle] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onCreateRoom(name);
-    setName("");
+    onAddRoom(title);
+    setTitle("");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
+      <form onSubmit={handleSubmit}>
+        <label>
         Room name:
-        <input
-          type="text"
-          value={name}
-          onChange={event => setName(event.target.value)}
-        />
+          <input
+              type="text"
+              value={title}
+              onChange={event => setTitle(event.target.value)}
+          />
       </label>
       <button type="submit">Create</button>
     </form>
