@@ -2,8 +2,27 @@ import React, {useEffect, useState} from 'react';
 import {Client, Room, RoomAvailable} from 'colyseus.js';
 import RoomsList from './RoomsList';
 import AddRoom from './AddRoom';
+import styled from 'styled-components';
 
 interface Props {}
+
+const LobbyFrame = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  //height: 100vh;
+  margin: 20px;
+`;
+
+const LobbyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  //height: 100vh;
+  margin: 20px;
+`;
 
 const Lobby: React.FC<Props> = () => {
     const colyseusClient = new Client('ws://localhost:3000');
@@ -56,16 +75,21 @@ const Lobby: React.FC<Props> = () => {
     };
 
     return (
-        <div>
-            <RoomsList
-                availableRooms={availableRooms}
-                joinedRoom={joinedRoom}
-                onJoin={handleJoinRoom}
-                onLeave={handleLeaveRoom}
-            />
-            <AddRoom onAddRoom={handleAddRoom}/>
-        </div>
-    );
+        <LobbyFrame>
+            <LobbyWrapper>
+                <RoomsList
+                    availableRooms={availableRooms}
+                    joinedRoom={joinedRoom}
+                    onJoin={handleJoinRoom}
+                    onLeave={handleLeaveRoom}
+                />
+            </LobbyWrapper>
+            <LobbyWrapper>
+                <AddRoom onAddRoom={handleAddRoom}/>
+            </LobbyWrapper>
+        </LobbyFrame>
+    )
+        ;
 };
 
 export default Lobby;
