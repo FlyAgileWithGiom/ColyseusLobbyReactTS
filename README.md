@@ -1,13 +1,20 @@
-## Running React on Repl.it
+## Lobby Room for Colyseus in React
+The point of this spike project is to see the feasibility of 
+- create a lobby UI that can be reused for multiplayer game based on Colyseus. It allows users to find each others, create new game rooms, etc
+- based on React+Typescript (simple enough, component based so graat for reuse)
+- eventually become a starting template for future Colyseus base games 
 
-[React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
+## How to use
+- two folders, client and server, no dependency or sharing anything (so far)
+- both npm+typescript
+- check package.json to see the starting scripts 
+- the server starts on port 3000 by default
+- the client is often pushed through Vite
+- so far, only connects through localhost  
 
-[Vite](https://vitejs.dev/) is a blazing fast frontend build tool that includes features like Hot Module Reloading (HMR), optimized builds, and TypeScript support out of the box.
-
-Using the two in conjunction is one of the fastest ways to build a web app.
-
-### Getting Started
-- Hit run
-- Edit [App.tsx](#src/App.tsx) and watch it live update!
-
-By default, Replit runs the `dev` script, but you can configure it by changing the `run` field in the [configuration file](#.replit). Here are the vite docs for [serving production websites](https://vitejs.dev/guide/build.html)
+## Upcoming
+- [] client reusing same host by default instead of localhost, or another url injected by context 
+- [] allows context wrapping to inject url to the component 
+- [] review possibilities to handle starting random games, if parameters are needed, etc 
+- [] merge into one server serving both the Colyseus websocket and the react app
+ 
