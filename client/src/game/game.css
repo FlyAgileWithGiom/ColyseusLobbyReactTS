@@ -1,0 +1,51 @@
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stacks-container {
+    display: flex;
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.rabbits-container {
+    display: flex;
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.players-container {
+  display: flex;
+}
+
+.current-player {
+  font-weight: bold;
+}
+
+.timer {
+    text-align: right;
+}
+
+.controls button {
+    margin-right: 10px;
+}
+
+.stack.selected {
+    transform: translateY(-10px);
+}
+
+.stack {
+    margin-right: 10px;
+}
+
+.hat-selected {
+    transform: translateY(-10px);
+}
+
+.stack-selected {
+    transform: translateY(-20px);
+}
+
+.card-flipped {
+    visibility: hidden;
+}

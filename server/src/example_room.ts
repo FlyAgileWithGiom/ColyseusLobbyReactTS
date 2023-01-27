@@ -12,7 +12,7 @@ export class ExampleRoom extends Room<State> {
 
     onCreate({title}: any) {
         this.setState(new State())
-        console.log(`RabbitGame ${title} room created!`);
+        console.log(`Example game ${title} room created!`);
         this.state.title = title;
         this.setMetadata({
             title: title,
