@@ -1,4 +1,4 @@
-import {Client, Room} from "colyseus";
+import {Client, Room, updateLobby} from "colyseus";
 import {MapSchema, Schema, type} from "@colyseus/schema";
 
 class State extends Schema {
@@ -8,18 +8,22 @@ class State extends Schema {
     players: MapSchema<string> = new MapSchema<string>();
 }
 
-export class RabbitGame extends Room<State> {
-
+export class ExampleRoom extends Room<State> {
 
     onCreate({title}: any) {
         this.setState(new State())
         console.log(`RabbitGame ${title} room created!`);
         this.state.title = title;
         this.setMetadata({
-            title: title
-        });
-        this.setMetadata({
+            title: title,
             players: []
+        }).then(() => {
+                updateLobby(this);
+            }
+        )
+        this.onMessage('startCmd', (client, message) => {
+            console.log(`starting room ${this.roomId}`);
+            this.broadcast('start', `we're starting the game with ${[...this.state.players.values()].join(', ')}`);
         })
     }
 
@@ -27,7 +31,12 @@ export class RabbitGame extends Room<State> {
         // pop the current player from the state.
         let playerName = this.state.players[client.sessionId];
         this.state.players.delete(client.sessionId);
-        this.metadata.players = this.metadata.players.filter((player) => player !== `${client.sessionId}-${playerName}`);
+        this.metadata.players = this.metadata.players.filter(
+            (player) => player !== `${client.sessionId}-${playerName}`
+        )
+
+        updateLobby(this);
+
         console.log(`${this.roomId}: ${client.sessionId}-${playerName} left!`);
     }
 
@@ -36,6 +45,8 @@ export class RabbitGame extends Room<State> {
         let playerName = options?.playerName;
         this.state.players[client.sessionId] = playerName;
         this.metadata.players.push(`${client.sessionId}-${playerName}`);
+        updateLobby(this);
+
         console.log(`${this.roomId}: ${client.sessionId}-${playerName} joined!`);
     }
 

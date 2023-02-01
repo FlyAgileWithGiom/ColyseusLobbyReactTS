@@ -4,7 +4,10 @@ import RoomsList from './RoomsList';
 import AddRoom from './AddRoom';
 import styled from 'styled-components';
 
-interface Props {}
+interface Props {
+    colyseusClient: Client;
+    onStartGame: (room: Room) => void;
+}
 
 const LobbyFrame = styled.div`
   display: flex;
@@ -48,8 +51,7 @@ function DefinePlayer(props: { onDefinePlayer: any }) {
     );
 }
 
-const Lobby: React.FC<Props> = () => {
-    const [colyseusClient, setColyseusClient] = useState<Client>(new Client('ws://localhost:3000'));
+const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
     const [lobby, setLobby] = useState<Room | null>(null);
     const [availableRooms, setAvailableRooms] = useState<RoomAvailable[]>([]);
     const [joinedRoom, setJoinedRoom] = useState<Room | null>(null);
@@ -84,7 +86,7 @@ const Lobby: React.FC<Props> = () => {
 
         colyseusClient?.joinById(roomId, {playerName: playerName})
             .then(joinedRoom => {
-                setJoinedRoom(joinedRoom);
+                joinRoomImpl(joinedRoom);
             });
 
     };
@@ -96,6 +98,14 @@ const Lobby: React.FC<Props> = () => {
             });
     };
 
+    function joinRoomImpl(joinedRoom: Room<unknown>) {
+        setJoinedRoom(joinedRoom);
+        console.log(`registering to start signal from room ${joinedRoom.id}`);
+        joinedRoom.onMessage("start", () => {
+            onStartGame(joinedRoom);
+        });
+    }
+
     const handleAddRoom = (title: string) => {
 
         handleLeaveRoom();
@@ -103,7 +113,7 @@ const Lobby: React.FC<Props> = () => {
         colyseusClient?.create('rabbit_game', {
             title: title, playerName: playerName
         }).then(joinedRoom => {
-            setJoinedRoom(joinedRoom);
+            joinRoomImpl(joinedRoom);
         });
 
     };
@@ -111,6 +121,10 @@ const Lobby: React.FC<Props> = () => {
     let handleDefinePlayer = (playerName: string) => {
         setPlayerName(playerName);
         console.log("Define player: " + playerName);
+    };
+    let handleStartGame = () => {
+        console.log(`Start game in room ${joinedRoom}`);
+        joinedRoom?.send("startCmd");
     };
     return (
         <LobbyFrame>
@@ -121,6 +135,7 @@ const Lobby: React.FC<Props> = () => {
                     joinedRoom={joinedRoom}
                     onJoin={handleJoinRoom}
                     onLeave={handleLeaveRoom}
+                    onStart={handleStartGame}
                 />
             </LobbyWrapper>
             <LobbyWrapper>

@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import LobbyPage from "./lobby/LobbyPage";
+import App from "./App";
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <LobbyPage/>
+        <App/>
     </React.StrictMode>
 )

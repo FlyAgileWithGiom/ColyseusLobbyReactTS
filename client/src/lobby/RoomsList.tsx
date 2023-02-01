@@ -6,17 +6,10 @@ interface RoomsListProps {
     joinedRoom: Room | null,
     onJoin: (roomId: string) => void,
     onLeave: () => void
+    onStart: () => void
 }
 
-const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin, onLeave}) => {
-
-    const handleJoin = (roomId: string) => {
-        onJoin(roomId);
-    }
-
-    const handleLeave = () => {
-        onLeave();
-    }
+const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin, onLeave, onStart}) => {
 
     return (
         <div>
@@ -25,24 +18,29 @@ const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin
                 <thead>
                 <tr>
                     <th>Room</th>
-                    <th>Number of Players</th>
-                    <th></th>
+                    <th>Players</th>
                 </tr>
                 </thead>
                 <tbody>
                 {availableRooms.map((room) => (
                     <tr key={room.roomId}>
                         <td>{room.metadata?.title || room.roomId}</td>
-                        <td>{room.clients}</td>
+                        {/*<td>{room.clients}</td>*/}
                         {room.metadata?.players && room.metadata.players.map((player: string) => (
                             <td>{player}</td>
                         ))}
 
                         <td>
                             {joinedRoom && joinedRoom.id === room.roomId ? (
-                                <button onClick={handleLeave}>Leave</button>
+                                <div>
+                                    <button onClick={() => {
+                                        onLeave();
+                                    }}>Leave
+                                    </button>
+                                    <button onClick={() => onStart()}>Start Game</button>
+                                </div>
                             ) : (
-                                 <button onClick={() => handleJoin(room.roomId)}>Join</button>
+                                 <button onClick={() => onJoin(room.roomId)}>Join</button>
                              )}
                         </td>
                     </tr>
