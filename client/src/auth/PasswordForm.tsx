@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+
 export interface Props {
   onAuthentOk: () => void;
 }
 
-export const PasswordForm: React.FC<Props> = ({ onAuthentOk }) => {
+export const PasswordForm: React.FC<Props> = ({onAuthentOk}) => {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
