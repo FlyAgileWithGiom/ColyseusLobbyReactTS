@@ -34,6 +34,10 @@ const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin
                     <tr key={room.roomId}>
                         <td>{room.metadata?.title || room.roomId}</td>
                         <td>{room.clients}</td>
+                        {room.metadata?.players && room.metadata.players.map((player: string) => (
+                            <td>{player}</td>
+                        ))}
+
                         <td>
                             {joinedRoom && joinedRoom.id === room.roomId ? (
                                 <button onClick={handleLeave}>Leave</button>

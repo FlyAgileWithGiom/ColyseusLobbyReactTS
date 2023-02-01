@@ -24,11 +24,36 @@ const LobbyWrapper = styled.div`
   margin: 20px;
 `;
 
+function DefinePlayer(props: { onDefinePlayer: any }) {
+    const [playerName, setPlayerName] = useState<string>("");
+
+    const definePlayerName = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        props.onDefinePlayer(playerName);
+    };
+
+    return (
+        <div>
+            <h2>Current PLayer</h2>
+            <form onSubmit={definePlayerName}>
+                <input
+                    type="text"
+                    value={playerName}
+                    placeholder="player name"
+                    onChange={event => setPlayerName(event.target.value)}
+                />
+                <button type="submit">Define</button>
+            </form>
+        </div>
+    );
+}
+
 const Lobby: React.FC<Props> = () => {
-    const colyseusClient = new Client('ws://localhost:3000');
+    const [colyseusClient, setColyseusClient] = useState<Client>(new Client('ws://localhost:3000'));
     const [lobby, setLobby] = useState<Room | null>(null);
     const [availableRooms, setAvailableRooms] = useState<RoomAvailable[]>([]);
     const [joinedRoom, setJoinedRoom] = useState<Room | null>(null);
+    const [playerName, setPlayerName] = useState<string>("");
 
     useEffect(() => {
         colyseusClient
@@ -55,10 +80,13 @@ const Lobby: React.FC<Props> = () => {
     }, []);
 
     const handleJoinRoom = (roomId: string) => {
-        colyseusClient?.joinById(roomId, {title: "player1"})
+        handleLeaveRoom();
+
+        colyseusClient?.joinById(roomId, {playerName: playerName})
             .then(joinedRoom => {
                 setJoinedRoom(joinedRoom);
             });
+
     };
 
     const handleLeaveRoom = () => {
@@ -69,13 +97,24 @@ const Lobby: React.FC<Props> = () => {
     };
 
     const handleAddRoom = (title: string) => {
-        colyseusClient?.create('rabbit_game', {title: title}).then(room => {
-            setJoinedRoom(room);
-        })
+
+        handleLeaveRoom();
+
+        colyseusClient?.create('rabbit_game', {
+            title: title, playerName: playerName
+        }).then(joinedRoom => {
+            setJoinedRoom(joinedRoom);
+        });
+
     };
 
+    let handleDefinePlayer = (playerName: string) => {
+        setPlayerName(playerName);
+        console.log("Define player: " + playerName);
+    };
     return (
         <LobbyFrame>
+            <DefinePlayer onDefinePlayer={handleDefinePlayer}/>
             <LobbyWrapper>
                 <RoomsList
                     availableRooms={availableRooms}
@@ -88,8 +127,7 @@ const Lobby: React.FC<Props> = () => {
                 <AddRoom onAddRoom={handleAddRoom}/>
             </LobbyWrapper>
         </LobbyFrame>
-    )
-        ;
+    );
 };
 
 export default Lobby;
