@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import Lobby from "./lobby/Lobby";
+import Lobby from "./Lobby";
 import {Client, Room} from "colyseus.js";
-import GameExample from "./game_example/GameExample";
+import GameExample from "../game_example/GameExample";
 
 const App: React.FC = () => {
-    const [colyseusClient, setColyseusClient] = useState<Client>(new Client('ws://localhost:3000'));
+    const [colyseusClient] = useState<Client>(new Client('ws://localhost:3000'));
     const [game, setGame] = useState<Room | null>(null);
 
     const handleStartGame = (room: Room) => {
