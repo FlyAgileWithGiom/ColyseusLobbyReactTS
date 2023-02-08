@@ -2,53 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Client, Room, RoomAvailable} from 'colyseus.js';
 import RoomsList from './RoomsList';
 import AddRoom from './AddRoom';
-import styled from 'styled-components';
+import NameDisplay from "./NameDisplay";
 
 interface Props {
     colyseusClient: Client;
     onStartGame: (room: Room) => void;
-}
-
-const LobbyFrame = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  //height: 100vh;
-  margin: 20px;
-`;
-
-const LobbyWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  //height: 100vh;
-  margin: 20px;
-`;
-
-function DefinePlayer(props: { onDefinePlayer: any }) {
-    const [playerName, setPlayerName] = useState<string>("");
-
-    const definePlayerName = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        props.onDefinePlayer(playerName);
-    };
-
-    return (
-        <div>
-            <h2>Current PLayer</h2>
-            <form onSubmit={definePlayerName}>
-                <input
-                    type="text"
-                    value={playerName}
-                    placeholder="player name"
-                    onChange={event => setPlayerName(event.target.value)}
-                />
-                <button type="submit">Define</button>
-            </form>
-        </div>
-    );
 }
 
 const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
@@ -127,9 +85,9 @@ const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
         joinedRoom?.send("startCmd");
     };
     return (
-        <LobbyFrame>
-            <DefinePlayer onDefinePlayer={handleDefinePlayer}/>
-            <LobbyWrapper>
+        <div className="flex flex-col items-center justify-around m-20">
+            <NameDisplay initialName={playerName} onConfirmNameChange={handleDefinePlayer}/>
+            <div className="flex flex-col items-center justify-around m-20">
                 <RoomsList
                     availableRooms={availableRooms}
                     joinedRoom={joinedRoom}
@@ -137,12 +95,13 @@ const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
                     onLeave={handleLeaveRoom}
                     onStart={handleStartGame}
                 />
-            </LobbyWrapper>
-            <LobbyWrapper>
+            </div>
+            <div className="flex flex-col items-center justify-around m-20">
                 <AddRoom onAddRoom={handleAddRoom}/>
-            </LobbyWrapper>
-        </LobbyFrame>
+            </div>
+        </div>
     );
+
 };
 
 export default Lobby;
