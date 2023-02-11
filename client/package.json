@@ -24,6 +24,7 @@
     "vite": "^3.0.4"
   },
   "dependencies": {
-    "colyseus.js": "^0.14.13"
+    "colyseus.js": "^0.14.13",
+    "unique-names-generator": "^4.7.1"
   }
 }

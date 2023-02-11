@@ -4,16 +4,24 @@ import RoomsList from './RoomsList';
 import AddRoom from './AddRoom';
 import NameDisplay from "./NameDisplay";
 
+import {Config, starWars, uniqueNamesGenerator} from 'unique-names-generator';
+
+const config: Config = {
+    dictionaries: [starWars]
+}
+
+const characterName: string = uniqueNamesGenerator(config); // Han Solo
 interface Props {
     colyseusClient: Client;
     onStartGame: (room: Room) => void;
 }
 
+
 const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
     const [lobby, setLobby] = useState<Room | null>(null);
     const [availableRooms, setAvailableRooms] = useState<RoomAvailable[]>([]);
     const [joinedRoom, setJoinedRoom] = useState<Room | null>(null);
-    const [playerName, setPlayerName] = useState<string>("");
+    const [playerName, setPlayerName] = useState<string>(characterName);
 
     useEffect(() => {
         colyseusClient
