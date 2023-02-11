@@ -7,44 +7,34 @@ interface NameDisplayProps {
 
 const NameDisplay: React.FC<NameDisplayProps> = ({initialName, onConfirmNameChange}) => {
     const [localName, setLocalName] = useState(initialName);
-    const [isModified, setIsModified] = useState(false);
+    const [isBeingModified, setIsBeingModified] = useState(false);
     const [isInputFocused, setIsInputFocused] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setLocalName(event.target.value);
-        setIsModified(true);
+        setIsBeingModified(true);
     };
 
-    const handleModifyClick = () => {
+    function modifyName() {
         onConfirmNameChange(localName);
-        setIsModified(false);
+        setIsBeingModified(false);
         inputRef.current?.blur();
-    };
+    }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            onConfirmNameChange(localName);
-            setIsModified(false);
-            inputRef.current?.blur();
+            modifyName()
         }
     };
 
     const handleFocus = () => {
         setIsInputFocused(true);
     };
-
-    const handleBlur = () => {
-        if (isModified) {
-            setLocalName(initialName);
-            setIsModified(false);
-        }
-        setIsInputFocused(false);
-    };
-
+    
     return (
         <div className="flex flex-col items-center">
-            <p className="text-xl font-medium mb-4">Modify Your Name</p>
+            <p className="text-xl font-medium mb-4">Your Name</p>
             <input
                 className={`outline-none border border-blue-500 focus:border-blue-500 ${
                     isInputFocused ? "border-blue-500" : ""
@@ -55,12 +45,11 @@ const NameDisplay: React.FC<NameDisplayProps> = ({initialName, onConfirmNameChan
                 onChange={handleNameChange}
                 onKeyDown={handleKeyDown}
                 onFocus={handleFocus}
-                onBlur={handleBlur}
             />
             <button
-                disabled={!isModified}
+                disabled={!isBeingModified}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg mt-4"
-                onClick={handleModifyClick}
+                onClick={modifyName}
             >
                 Modify
             </button>
