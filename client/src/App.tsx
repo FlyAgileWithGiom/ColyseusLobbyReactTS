@@ -3,8 +3,10 @@ import Lobby from "./lobby/Lobby";
 import {Client, Room} from "colyseus.js";
 import GameExample from "./game_example/GameExample";
 
+const hostname = window.location.hostname;
+
 const App: React.FC = () => {
-    const [colyseusClient] = useState<Client>(new Client('ws://localhost:3000'));
+    const [colyseusClient] = useState<Client>(new Client(`ws://${hostname}:3000`));
     const [game, setGame] = useState<Room | null>(null);
 
     const handleStartGame = (room: Room) => {
