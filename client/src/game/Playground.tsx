@@ -83,20 +83,22 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
     }
 
     return (
-        <div className="stacks-container d-flex">
+        <div className="flex flex-row">
             {
                 Array.from({length: props.hats.length}, (_, i) => (
+                    <div className="">
 
-                    <Stack
-                        key={i}
-                        hatNumber={props.hats[i]}
-                        rabbitNumber={props.rabbits[i]}
-                        onHatSelect={() => handleSwapHat(i)}
-                        onStackSelect={() => handleSwapStack(i)}
-                        onFlip={() => handleFlip(i)}
-                        flipped={flippedStack === i}
-                        hatSelected={firstSwappedHat1 !== null && i in [firstSwappedHat1, firstSwappedHat2]}
-                        stackSelected={firstSwappedStack1 !== null && i in [firstSwappedStack1, firstSwappedStack2]}/>
+                        <Stack
+                            key={i}
+                            hatNumber={props.hats[i]}
+                            rabbitNumber={props.rabbits[i]}
+                            onHatSelect={() => handleSwapHat(i)}
+                            onStackSelect={() => handleSwapStack(i)}
+                            onFlip={() => handleFlip(i)}
+                            flipped={flippedStack === i}
+                            hatSelected={firstSwappedHat1 !== null && i in [firstSwappedHat1, firstSwappedHat2]}
+                            stackSelected={firstSwappedStack1 !== null && i in [firstSwappedStack1, firstSwappedStack2]}/>
+                    </div>
                 ))}
         </div>
     );

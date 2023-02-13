@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
     return game == null
         ? <Lobby colyseusClient={colyseusClient} onStartGame={handleStartGame}/>
-        : <GameComponent client={colyseusClient} room={game!}></GameComponent>;
+        : <GameComponent colyseus={colyseusClient} room={game!}></GameComponent>;
 };
 
 export default App;

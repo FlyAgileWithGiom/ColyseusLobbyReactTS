@@ -14,9 +14,8 @@ interface StackProps {
 }
 
 const Stack: React.FC<StackProps> = (props) => {
-    const rabbitClass = props.stackSelected ? '-translate-y-10' : '';
-    const hatClass = props.hatSelected ? '-translate-y-10' : '';
 
+    const standApartClass = 'transform translate-y-10';
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault();
         if (event.shiftKey) {
@@ -32,11 +31,11 @@ const Stack: React.FC<StackProps> = (props) => {
         <div
             onClick={handleClick}
         >
-            <div className={hatClass}>
-                <Hat number={props.hatNumber} flipped={!props.flipped}/>
+            <div className={props.hatSelected || props.stackSelected ? standApartClass : ''}>
+                <Hat number={props.hatNumber} flipped={props.flipped}/>
             </div>
-            <div className={rabbitClass}>
-                <Rabbit number={props.rabbitNumber} flipped={props.flipped}/>
+            <div className={props.stackSelected ? standApartClass : ''}>
+                <Rabbit number={props.rabbitNumber} flipped={!props.flipped}/>
             </div>
         </div>
     );
