@@ -7,7 +7,7 @@ interface HatProps {
 
 const Hat: React.FC<HatProps> = (props) => {
   return (
-      <div className={props.flipped ? '' : 'card-flipped'}>
+      <div className={props.flipped ? '' : 'grayscale-100'}>
           <img src={`/images/hat-${props.number}.png`} alt={`Hat ${props.number}`}/>
       </div>
   );

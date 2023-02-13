@@ -9,6 +9,7 @@ export class GameState extends Schema {
     @type("string") currentPlayer = "";
     @type("string") lastMove = "";
     @type("number") timeLeft = 0;
+    @type('number') flipped: null;
 }
 
 function swap(a: number[], i, j) {
@@ -39,6 +40,26 @@ class RabbitHatsGameRoom extends Room<GameState> {
         this.onMessage('swapHats', (client, {i, j}) => {
             this.swapHats(i, j);
         })
+
+        this.onMessage('swapStacks', (client, {i, j}) => {
+            this.swapStacks(i, j);
+        })
+
+        this.onMessage('flipStack', (client, {i}) => {
+            this.flipUnflipStack(i);
+        })
+    }
+
+    private flipUnflipStack(i) {
+        if (this.state.flipped === i) {
+            this.state.flipped = null;
+        } else {
+            this.state.flipped = i;
+        }
+    }
+
+    private flipStack(i) {
+        this.state.flipped = i;
     }
 
     onJoin(client: Client, options?: { playerName: string }, auth?: any): void | Promise<any> {
@@ -67,6 +88,13 @@ class RabbitHatsGameRoom extends Room<GameState> {
         console.log(`swapping hats ${i},${j} in ${[...this.state.hats.values()]}`);
         swap(this.state.hats, i, j)
         console.log(`hats are now ${[...this.state.hats.values()]}`);
+    }
+
+    private swapStacks(i: any, j: any) {
+        console.log(`swapping stacks ${i},${j}}`);
+        swap(this.state.rabbits, i, j)
+        swap(this.state.hats, i, j)
+        console.log(`stacks hats are now ${[...this.state.hats.values()]}`);
     }
 }
 

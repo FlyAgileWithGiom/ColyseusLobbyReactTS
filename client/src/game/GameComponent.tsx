@@ -66,8 +66,8 @@ const GameComponent: React.FC<GameProps> = (props) => {
             <PlayersList players={gameState.players} currentPlayer={props.room.state.currentPlayer}/>
             <Timer time={gameState.timeLeft}/>
             <Playground
-                hatsOrder={gameState.hats}
-                rabbitsOrder={gameState.rabbits}
+                hats={gameState.hats}
+                rabbits={gameState.rabbits}
                 onSwapStacks={handleSwapStacks}
                 onSwapHats={handleSwapHats}
                 onFlipStack={handleFlipStack}

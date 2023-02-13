@@ -7,7 +7,7 @@ interface RabbitProps {
 
 const Rabbit: React.FC<RabbitProps> = (props) => {
   return (
-      <div className={props.flipped ? '' : 'card-flipped'}>
+      <div className={props.flipped ? '' : 'grayscale-100'}>
           <img src={`/images/rabbit-${props.number}.png`} alt={`Rabbit ${props.number}`}/>
       </div>
   );

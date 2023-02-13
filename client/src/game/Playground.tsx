@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import Stack from './Stack';
 
 interface PlaygroundProps {
-    hatsOrder: number[];
-    rabbitsOrder: number[];
+    hats: number[];
+    rabbits: number[];
     onSwapStacks: (from: number, to: number) => void;
     onSwapHats: (from: number, to: number) => void;
     onFlipStack: (stackNumber: number) => void;
@@ -19,6 +19,18 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
     function triggerSwapHats(i: number, j: number) {
         props.onSwapHats(i, j);
         resetSwapHats()
+        resetSwapStacks()
+    }
+
+    function triggerSwapStack(i: number, j: number) {
+        props.onSwapStacks(i, j);
+        resetSwapHats()
+        resetSwapStacks()
+    }
+
+    function resetSwapHats() {
+        setFirstSwappedHat1(null)
+        setFirstSwappedHat2(null)
     }
 
     function resetSwapStacks() {
@@ -26,8 +38,8 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
         setFirstSwappedStack2(null)
     }
 
-    const handleSwapHat = (event: React.MouseEvent<HTMLElement>, number: number) => {
-        event.preventDefault();
+
+    const handleSwapHat = (number: number) => {
         // cancel other action
         resetSwapStacks();
 
@@ -45,18 +57,7 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
         }
     }
 
-    function triggerSwapStack(i: number, j: number) {
-        props.onSwapStacks(i, j);
-        resetSwapStacks()
-    }
-
-    function resetSwapHats() {
-        setFirstSwappedHat1(null)
-        setFirstSwappedHat2(null)
-    }
-
-    const handleSwapStack = (event: React.MouseEvent<HTMLElement>, number: number) => {
-        event.preventDefault();
+    const handleSwapStack = (number: number) => {
         // cancel other action
         resetSwapHats();
 
@@ -74,8 +75,7 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
         }
     }
 
-    const handleFlip = (event: React.MouseEvent<HTMLElement>, number: number) => {
-        event.preventDefault();
+    const handleFlip = (number: number) => {
         resetSwapHats()
         resetSwapStacks()
         setFlippedStack(number)
@@ -84,17 +84,16 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
 
     return (
         <div className="stacks-container d-flex">
-
             {
-                Array.from({length: props.hatsOrder.length}, (_, i) => (
+                Array.from({length: props.hats.length}, (_, i) => (
 
                     <Stack
                         key={i}
-                        hatNumber={props.hatsOrder[i]}
-                        rabbitNumber={props.rabbitsOrder[i]}
-                        onClick={(event) => handleSwapHat(event, i)}
-                        onContextClick={(event) => handleSwapStack(event, i)}
-                        onShiftClick={(event) => handleFlip(event, i)}
+                        hatNumber={props.hats[i]}
+                        rabbitNumber={props.rabbits[i]}
+                        onHatSelect={() => handleSwapHat(i)}
+                        onStackSelect={() => handleSwapStack(i)}
+                        onFlip={() => handleFlip(i)}
                         flipped={flippedStack === i}
                         hatSelected={firstSwappedHat1 !== null && i in [firstSwappedHat1, firstSwappedHat2]}
                         stackSelected={firstSwappedStack1 !== null && i in [firstSwappedStack1, firstSwappedStack2]}/>

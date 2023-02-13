@@ -8,35 +8,36 @@ interface StackProps {
     flipped: boolean;
     hatSelected: boolean;
     stackSelected: boolean;
-    onClick: (event: React.MouseEvent<HTMLElement>) => void;
-    onShiftClick: (event: React.MouseEvent<HTMLElement>) => void;
-    onContextClick: (event: React.MouseEvent<HTMLElement>) => void;
+    onHatSelect: () => void;
+    onFlip: () => void;
+    onStackSelect: () => void;
 }
 
 const Stack: React.FC<StackProps> = (props) => {
-    const stackClass = props.stackSelected ? 'stack-selected' : '';
-    const hatClass = props.hatSelected ? 'hat-selected' : '';
+    const rabbitClass = props.stackSelected ? '-translate-y-10' : '';
+    const hatClass = props.hatSelected ? '-translate-y-10' : '';
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+        event.preventDefault();
         if (event.shiftKey) {
-            props.onShiftClick(event);
+            props.onStackSelect();
+        } else if (event.altKey) {
+            props.onFlip();
         } else {
-            props.onClick(event);
+            props.onHatSelect();
         }
-    }
-
-    //todo flip each card, reversing the hiding, or flip the stack?
+    };
 
     return (
         <div
-            className={`stack ${stackClass}`}
-            onClick={(event) => handleClick(event)}
-            onContextMenu={props.onContextClick}
+            onClick={handleClick}
         >
             <div className={hatClass}>
                 <Hat number={props.hatNumber} flipped={!props.flipped}/>
             </div>
-            <Rabbit number={props.rabbitNumber} flipped={props.flipped}/>
+            <div className={rabbitClass}>
+                <Rabbit number={props.rabbitNumber} flipped={props.flipped}/>
+            </div>
         </div>
     );
 };
