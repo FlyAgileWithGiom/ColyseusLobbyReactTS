@@ -26,7 +26,7 @@ const GameComponent: React.FC<GameProps> = (props) => {
 
     function copyColyseusState() {
         return {
-            players: [...props.room.state.players],
+            players: [...props.room.state.players.values()],
             hats: [...props.room.state.hats],
             rabbits: [...props.room.state.rabbits],
             currentPlayer: props.room.state.currentPlayer,
