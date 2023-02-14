@@ -82,8 +82,16 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
         props.onFlipStack(number);
     }
 
+    function isHatSelected(i: number) {
+        return (firstSwappedHat1 !== null && firstSwappedHat1 === i) || (firstSwappedHat2 !== null && firstSwappedHat2 === i);
+    }
+
+    function isStackSelected(i: number) {
+        return firstSwappedStack1 !== null && (firstSwappedStack1 === i || firstSwappedStack2 === i);
+    }
+
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row my-20">
             {
                 Array.from({length: props.hats.length}, (_, i) => (
                     <div className="">
@@ -96,8 +104,8 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
                             onStackSelect={() => handleSwapStack(i)}
                             onFlip={() => handleFlip(i)}
                             flipped={flippedStack === i}
-                            hatSelected={firstSwappedHat1 !== null && i in [firstSwappedHat1, firstSwappedHat2]}
-                            stackSelected={firstSwappedStack1 !== null && i in [firstSwappedStack1, firstSwappedStack2]}/>
+                            hatSelected={isHatSelected(i)}
+                            stackSelected={isStackSelected(i)}/>
                     </div>
                 ))}
         </div>

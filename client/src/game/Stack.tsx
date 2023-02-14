@@ -15,7 +15,6 @@ interface StackProps {
 
 const Stack: React.FC<StackProps> = (props) => {
 
-    const standApartClass = 'transform translate-y-10';
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault();
         if (event.shiftKey) {
@@ -27,14 +26,18 @@ const Stack: React.FC<StackProps> = (props) => {
         }
     };
 
+    let hatClass = `transition ease-in-out duration-500 ${props.hatSelected || props.stackSelected ? '-translate-y-10' : ' translate-y-0'}`;
+    let stackClass = `transition ease-in-out duration-500 ${props.stackSelected ? '-translate-y-10' : ' translate-y-0'}`;
     return (
         <div
             onClick={handleClick}
+            className="flex flex-col items-center"
         >
-            <div className={props.hatSelected || props.stackSelected ? standApartClass : ''}>
+            <div
+                className={hatClass}>
                 <Hat number={props.hatNumber} flipped={props.flipped}/>
             </div>
-            <div className={props.stackSelected ? standApartClass : ''}>
+            <div className={stackClass}>
                 <Rabbit number={props.rabbitNumber} flipped={!props.flipped}/>
             </div>
         </div>
