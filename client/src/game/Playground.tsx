@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Stack from './Stack';
+import {Room} from "colyseus.js";
 
 interface PlaygroundProps {
+    room: Room
     hats: number[];
     rabbits: number[];
     onSwapStacks: (from: number, to: number) => void;
@@ -15,17 +17,36 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
     const [firstSwappedStack1, setFirstSwappedStack1] = useState<number | null>(null);
     const [firstSwappedStack2, setFirstSwappedStack2] = useState<number | null>(null);
     const [flippedStack, setFlippedStack] = useState<number | null>(null);
+    const [swapping, setSwapping] = useState<boolean>(false);
+
+    useEffect(() => {
+        props.room.onMessage("hatsSwapped", () => {
+            setSwapping(true)
+        })
+        props.room.onMessage("stackSwapped", () => {
+            setSwapping(true)
+        })
+    }, [])
+
+    useEffect(() => {
+        setTimeout(() => {
+            resetSwapHats()
+            setSwapping(false)
+        }, 500)
+    }, [swapping])
 
     function triggerSwapHats(i: number, j: number) {
-        props.onSwapHats(i, j);
-        resetSwapHats()
-        resetSwapStacks()
+        setTimeout(() => {
+            props.onSwapHats(i, j);
+        }, 500);
+        // resetSwapHats()
+        // resetSwapStacks()
     }
 
     function triggerSwapStack(i: number, j: number) {
         props.onSwapStacks(i, j);
-        resetSwapHats()
-        resetSwapStacks()
+        // resetSwapHats()
+        // resetSwapStacks()
     }
 
     function resetSwapHats() {
@@ -53,7 +74,11 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
                 return;
             // validate swap and reset
             setFirstSwappedHat2(number)
+            // // wait 500ms before triggering swap to allow animation to finish
+            // setTimeout(() => {
+            //     resetSwapHats()
             triggerSwapHats(firstSwappedHat1, number);
+            // }, 500);
         }
     }
 
@@ -76,8 +101,6 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
     }
 
     const handleFlip = (number: number) => {
-        resetSwapHats()
-        resetSwapStacks()
         setFlippedStack(number)
         props.onFlipStack(number);
     }
@@ -105,7 +128,9 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
                             onFlip={() => handleFlip(i)}
                             flipped={flippedStack === i}
                             hatSelected={isHatSelected(i)}
-                            stackSelected={isStackSelected(i)}/>
+                            stackSelected={isStackSelected(i)}
+                            swapping={swapping}
+                        />
                     </div>
                 ))}
         </div>

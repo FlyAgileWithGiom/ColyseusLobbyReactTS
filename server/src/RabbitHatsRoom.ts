@@ -87,6 +87,7 @@ class RabbitHatsGameRoom extends Room<GameState> {
     private swapHats(i, j) {
         console.log(`swapping hats ${i},${j} in ${[...this.state.hats.values()]}`);
         swap(this.state.hats, i, j)
+        this.broadcast('hatsSwapped', {i, j})
         console.log(`hats are now ${[...this.state.hats.values()]}`);
     }
 
