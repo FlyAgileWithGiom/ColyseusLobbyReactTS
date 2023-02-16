@@ -1,7 +1,7 @@
 import {Client, Room, updateLobby} from "colyseus";
 import {ArraySchema, MapSchema, Schema, type} from "@colyseus/schema";
 
-const ANIMATION_STEP_PAUSE = 300;
+export const ANIMATION_STEP_PAUSE = 300;
 
 export class GameState extends Schema {
     @type("string") title: string;
@@ -17,7 +17,6 @@ export class GameState extends Schema {
 }
 
 function swap(a: number[], i, j) {
-    // swao elements i and j in array a
     let temp = a[i];
     a[i] = a[j];
     a[j] = temp;
@@ -100,7 +99,7 @@ class RabbitHatsGameRoom extends Room<GameState> {
             //wait 500ms before swapping
             setTimeout(() => {
                 const [i, j] = elements;
-                onCompletion(i, j);
+                onCompletion.bind(this, i, j);
                 setTimeout(() => {
                     elements.clear();
                 }, ANIMATION_STEP_PAUSE);
