@@ -1,59 +1,50 @@
 import React, {useEffect, useState} from 'react';
-import Hat from "./Hat";
-import Rabbit from "./Rabbit";
+import {Hat, Rabbit} from "./Cards";
+
+export const ANIMATION_STEP_PAUSE = 300;
 
 interface StackProps {
     hatNumber: number;
     rabbitNumber: number;
     flipped: boolean;
     hatSelected: boolean;
-    swapping: boolean;
     stackSelected: boolean;
     onHatSelect: () => void;
     onFlip: () => void;
     onStackSelect: () => void;
 }
 
-const Stack: React.FC<StackProps> = (props) => {
+const Stack: React.FC<StackProps> = ({
+                                         flipped,
+                                         hatNumber,
+                                         rabbitNumber,
+                                         hatSelected,
+                                         stackSelected,
+                                         onFlip,
+                                         onHatSelect,
+                                         onStackSelect
+                                     }) => {
 
-    const [hatUp, setHatUp] = useState<boolean>(false);
-    const [stackUp, setStackUp] = useState<boolean>(false);
-    const [hatMarked, setHatMarked] = useState<boolean>(false);
-    const [stackMarked, setStackMarked] = useState<boolean>(false);
-
-    useEffect(() => {
-        setHatUp(props.hatSelected || props.stackSelected);
-    }, [props.hatSelected, props.stackSelected]);
-
-    useEffect(() => {
-        setStackUp(props.stackSelected);
-    }, [props.stackSelected]);
-
-    useEffect(() => {
-        setHatMarked(props.swapping)
-    }, [props.swapping])
+    const [hatLifted, setHatLifted] = useState<boolean>(false);
+    const [lifted, setLifted] = useState<boolean>(false);
 
     useEffect(() => {
-        setStackMarked(props.swapping && props.stackSelected)
-    }, [props.swapping])
+        setHatLifted(hatSelected || stackSelected);
+    }, [hatSelected, stackSelected]);
 
-    // useEffect(() => {
-    //     if (props.hatSelected || props.stackSelected) {
-    //         setTimeout(() => {
-    //             setHatUp(false);
-    //         }, 500);
-    //     }
-    // }, [props.stackSelected]);
-
+    useEffect(() => {
+        setLifted(stackSelected);
+    }, [stackSelected]);
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         event.preventDefault();
-        if (event.shiftKey) {
-            props.onStackSelect();
-        } else if (event.altKey) {
-            props.onFlip();
+        console.log('click', event);
+        if (event.altKey) {
+            onFlip();
+        } else if (event.shiftKey) {
+            onStackSelect();
         } else {
-            props.onHatSelect();
+            onHatSelect();
         }
     };
 
@@ -63,19 +54,16 @@ const Stack: React.FC<StackProps> = (props) => {
             className="flex flex-col items-center"
         >
             <div
-                className={`transition ease-in-out duration-500 \
-                ${hatUp ? '-translate-y-10' : ' translate-y-0'} \
-                ${hatMarked ? 'outline-blue-500' : ''} 
+                className={`transition ease-in-out duration-${ANIMATION_STEP_PAUSE} 
+                ${hatLifted ? '-translate-y-10 outline-blue-500' : ' translate-y-0'}  
                 `}>
-                <Hat number={props.hatNumber} flipped={props.flipped}/>
+                <Hat number={hatNumber} flipped={flipped}/>
             </div>
             <div
-                className={`transition ease-in-out duration-500 \
-                ${stackUp ? '-translate-y-10' : ' translate-y-0'}\
-                ${stackMarked ? 'outline-blue-500' : ''}\
-                
-            `}>
-                <Rabbit number={props.rabbitNumber} flipped={!props.flipped}/>
+                className={`transition ease-in-out duration-${ANIMATION_STEP_PAUSE} 
+                ${lifted ? '-translate-y-10 outline-blue-500' : ' translate-y-0'}
+                 s`}>
+                <Rabbit number={rabbitNumber} flipped={!flipped}/>
             </div>
         </div>
     );

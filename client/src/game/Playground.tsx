@@ -14,7 +14,7 @@ interface BoardStateItf {
     rabbits: number[],
     selectedHats: [number],
     selectedStacks: [number],
-    flippedStacks: number
+    flippedStack: number
 }
 
 function cloneBoardState(state: BoardStateItf) {
@@ -23,13 +23,12 @@ function cloneBoardState(state: BoardStateItf) {
         rabbits: [...state.rabbits],
         selectedHats: [...state.selectedHats],
         selectedStacks: [...state.selectedStacks],
-        flippedStacks: state.flippedStacks
+        flippedStacks: state.flippedStack
     }
 }
 
 const Playground: React.FC<PlaygroundProps> = (props) => {
     const [boardState, setBoardState] = useState<any>(cloneBoardState(props.room.state));
-    const [swapping, setSwapping] = useState<boolean>(false);
 
     // synchronise the board state with the room state
     useEffect(() => {
@@ -48,7 +47,7 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
     }
 
     const handleFlip = (number: number) => {
-        props.room.send('flipStack', {stackNumber: number})
+        props.room.send('flipStack', {i: number})
     }
 
     function isHatSelected(i: number) {
@@ -64,22 +63,20 @@ const Playground: React.FC<PlaygroundProps> = (props) => {
     }
 
     return (
-        <div className="flex flex-row my-20">
+        <div className="flex flex-row my-20 select-none">
             {
                 Array.from({length: boardState.hats.length}, (_, i) => (
-                    <div className="">
+                    <div className="" key={i}>
                         <Stack
                             key={i}
                             hatNumber={boardState.hats[i]}
                             rabbitNumber={boardState.rabbits[i]}
-                            onHatSelect={() => handleSelectHat(i)}
-                            onStackSelect={() => handleSwapStack(i)}
-                            onFlip={() => handleFlip(i)}
-                            // TODO technically these should be mutually exclusive
                             flipped={isStackFlipped(i)}
                             hatSelected={isHatSelected(i)}
                             stackSelected={isStackSelected(i)}
-                            swapping={swapping}
+                            onHatSelect={() => handleSelectHat(i)}
+                            onStackSelect={() => handleSwapStack(i)}
+                            onFlip={() => handleFlip(i)}
                         />
                     </div>
                 ))}

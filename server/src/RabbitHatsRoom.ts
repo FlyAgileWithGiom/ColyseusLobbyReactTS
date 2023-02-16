@@ -49,7 +49,7 @@ class RabbitHatsGameRoom extends Room<GameState> {
         })
 
         this.onMessage('flipStack', (client, {i}) => {
-            // this.flipUnflipStack(i);
+            this.onFlipStack(i);
         })
     }
 
@@ -77,12 +77,14 @@ class RabbitHatsGameRoom extends Room<GameState> {
 
     private onSelectHat(number: number) {
         // first clicked
-        this.processSwappableSelection(this.state.selectedHats, number, this.swapHats);
+        this.processSwappableSelection(this.state.selectedHats, number, (i, j) => {
+            this.swapHats(i, j)
+        });
     }
 
     private onSelectStack(number: number) {
         // first clicked
-        this.processSwappableSelection(this.state.selectedStacks, number, this.swapStacks);
+        this.processSwappableSelection(this.state.selectedStacks, number, (i, j) => this.swapStacks(i, j));
     }
 
 
@@ -92,6 +94,11 @@ class RabbitHatsGameRoom extends Room<GameState> {
             this.state.selectedStacks.clear();
         }
 
+        if (elements.includes(number)) {
+            elements.clear();
+            return;
+        }
+
         elements.push(number)
 
         // validate swap and reset
@@ -99,7 +106,7 @@ class RabbitHatsGameRoom extends Room<GameState> {
             //wait 500ms before swapping
             setTimeout(() => {
                 const [i, j] = elements;
-                onCompletion.bind(this, i, j);
+                onCompletion(i, j);
                 setTimeout(() => {
                     elements.clear();
                 }, ANIMATION_STEP_PAUSE);
@@ -118,6 +125,14 @@ class RabbitHatsGameRoom extends Room<GameState> {
         console.log(`swapping hats ${i},${j} in ${[...this.state.hats.values()]}`);
         swap(this.state.hats, i, j)
         console.log(`hats are now ${[...this.state.hats.values()]}`);
+    }
+
+    private onFlipStack(i: number) {
+        if (this.state.flippedStack !== null) {
+            this.state.flippedStack = null;
+        } else {
+            this.state.flippedStack = i;
+        }
     }
 }
 
