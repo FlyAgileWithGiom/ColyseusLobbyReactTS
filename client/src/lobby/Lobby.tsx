@@ -3,14 +3,26 @@ import {Client, Room, RoomAvailable} from 'colyseus.js';
 import RoomsList from './RoomsList';
 import AddRoom from './AddRoom';
 import NameDisplay from "./NameDisplay";
+import {animals, colors, starWars, uniqueNamesGenerator} from 'unique-names-generator';
 
-import {Config, starWars, uniqueNamesGenerator} from 'unique-names-generator';
+export function generateRoomName() {
+    //make the generated room name title case
 
-const config: Config = {
-    dictionaries: [starWars]
+    return uniqueNamesGenerator({
+        dictionaries: [colors, animals]
+    }).replace('_', ' ').replace(/\w\S*/g, (txt) => {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
 }
 
-const characterName: string = uniqueNamesGenerator(config); // Han Solo
+function generatePlayerName() {
+    return uniqueNamesGenerator({
+        dictionaries: [starWars]
+    });
+}
+
+
+// Han Solo
 interface Props {
     colyseusClient: Client;
     onStartGame: (room: Room) => void;
@@ -21,7 +33,7 @@ const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
     const [lobby, setLobby] = useState<Room | null>(null);
     const [availableRooms, setAvailableRooms] = useState<RoomAvailable[]>([]);
     const [joinedRoom, setJoinedRoom] = useState<Room | null>(null);
-    const [playerName, setPlayerName] = useState<string>(characterName);
+    const [playerName, setPlayerName] = useState<string>(generatePlayerName());
 
     useEffect(() => {
         colyseusClient
@@ -29,6 +41,9 @@ const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
             .then((lobby: Room) => {
                 setLobby(lobby);
                 lobby.onMessage("rooms", (rooms: RoomAvailable[]) => {
+                    if (rooms.length == 0) {
+                        createAndJoinRoom(generateRoomName())
+                    }
                     setAvailableRooms(rooms);
                 });
 
@@ -72,15 +87,19 @@ const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
         });
     }
 
-    const handleAddRoom = (title: string) => {
-
-        handleLeaveRoom();
-
+    function createAndJoinRoom(title: string) {
         colyseusClient?.create('rabbit_game', {
             title: title, playerName: playerName
         }).then(joinedRoom => {
             joinRoomImpl(joinedRoom);
         });
+    }
+
+    const handleAddRoom = (title: string) => {
+
+        handleLeaveRoom();
+
+        createAndJoinRoom(title);
 
     };
 

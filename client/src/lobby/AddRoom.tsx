@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {animals, colors, Config, uniqueNamesGenerator} from "unique-names-generator";
-
-const config: Config = {
-    dictionaries: [colors, animals]
-}
-
-function generateRoomName() {
-    return uniqueNamesGenerator(config);
-}
+import {generateRoomName} from "./Lobby";
 
 interface AddRoomProps {
     onAddRoom: (title: string) => void;

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "colyseus.js": "^0.14.13",
+    "lodash": "^4.17.21",
     "unique-names-generator": "^4.7.1"
   }
 }
