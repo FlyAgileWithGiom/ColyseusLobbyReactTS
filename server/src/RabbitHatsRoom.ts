@@ -1,15 +1,19 @@
 import {Client, Room, updateLobby} from "colyseus";
 import {ArraySchema, MapSchema, Schema, type} from "@colyseus/schema";
 
+const ANIMATION_STEP_PAUSE = 300;
+
 export class GameState extends Schema {
     @type("string") title: string;
     @type({map: "string"}) players = new MapSchema<string>();
     @type(["number"]) hats = new ArraySchema<number>(1, 2, 3, 4, 5, 6, 7, 8, 9);
     @type(["number"]) rabbits = new ArraySchema<number>(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    @type(["number"]) selectedHats = new ArraySchema<number>()
+    @type(["number"]) selectedStacks = new ArraySchema<number>()
+    @type("number") flippedStack = null;
     @type("string") currentPlayer = "";
-    @type("string") lastMove = "";
     @type("number") timeLeft = 0;
-    @type('number') flipped: null;
+
 }
 
 function swap(a: number[], i, j) {
@@ -37,29 +41,17 @@ class RabbitHatsGameRoom extends Room<GameState> {
             this.broadcast('start', `we're starting the game with ${[...this.state.players.values()].join(', ')}`);
         })
 
-        this.onMessage('swapHats', (client, {i, j}) => {
-            this.swapHats(i, j);
+        this.onMessage('selectHat', (client, {i}) => {
+            this.onSelectHat(i);
         })
 
-        this.onMessage('swapStacks', (client, {i, j}) => {
-            this.swapStacks(i, j);
+        this.onMessage('selectStack', (client, {i}) => {
+            this.onSelectStack(i);
         })
 
         this.onMessage('flipStack', (client, {i}) => {
-            this.flipUnflipStack(i);
+            // this.flipUnflipStack(i);
         })
-    }
-
-    private flipUnflipStack(i) {
-        if (this.state.flipped === i) {
-            this.state.flipped = null;
-        } else {
-            this.state.flipped = i;
-        }
-    }
-
-    private flipStack(i) {
-        this.state.flipped = i;
     }
 
     onJoin(client: Client, options?: { playerName: string }, auth?: any): void | Promise<any> {
@@ -84,18 +76,49 @@ class RabbitHatsGameRoom extends Room<GameState> {
         console.log(`${this.roomId}: ${playerName} left!`);
     }
 
+    private onSelectHat(number: number) {
+        // first clicked
+        this.processSwappableSelection(this.state.selectedHats, number, this.swapHats);
+    }
+
+    private onSelectStack(number: number) {
+        // first clicked
+        this.processSwappableSelection(this.state.selectedStacks, number, this.swapStacks);
+    }
+
+
+    private processSwappableSelection(elements: ArraySchema<number>, number: number, onCompletion: (i: number, j: number) => void) {
+        if (elements.length === 0) {
+            this.state.selectedHats.clear();
+            this.state.selectedStacks.clear();
+        }
+
+        elements.push(number)
+
+        // validate swap and reset
+        if (elements.length === 2) {
+            //wait 500ms before swapping
+            setTimeout(() => {
+                const [i, j] = elements;
+                onCompletion(i, j);
+                setTimeout(() => {
+                    elements.clear();
+                }, ANIMATION_STEP_PAUSE);
+            }, ANIMATION_STEP_PAUSE);
+        }
+    }
+
+    private swapStacks(i: number, j: number) {
+        console.log(`swapping stacks ${i},${j} in ${[...this.state.rabbits.values()]}`);
+        swap(this.state.rabbits, i, j)
+        swap(this.state.hats, i, j)
+        console.log(`stacks are now ${[...this.state.rabbits.values()]}`);
+    }
+
     private swapHats(i, j) {
         console.log(`swapping hats ${i},${j} in ${[...this.state.hats.values()]}`);
         swap(this.state.hats, i, j)
-        this.broadcast('hatsSwapped', {i, j})
         console.log(`hats are now ${[...this.state.hats.values()]}`);
-    }
-
-    private swapStacks(i: any, j: any) {
-        console.log(`swapping stacks ${i},${j}}`);
-        swap(this.state.rabbits, i, j)
-        swap(this.state.hats, i, j)
-        console.log(`stacks hats are now ${[...this.state.hats.values()]}`);
     }
 }
 

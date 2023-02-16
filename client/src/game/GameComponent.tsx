@@ -12,10 +12,9 @@ interface GameProps {
 }
 
 
+
 interface GameStateItf {
     players: string[],
-    hats: number[],
-    rabbits: number[],
     currentPlayer: string | null,
     timeLeft: number,
     announcement: string
@@ -24,11 +23,9 @@ interface GameStateItf {
 const GameComponent: React.FC<GameProps> = (props) => {
     const [gameState, setGameState] = useState<GameStateItf>(copyColyseusState());
 
-    function copyColyseusState() {
+    function copyColyseusState(): GameStateItf {
         return {
             players: [...props.room.state.players.values()],
-            hats: [...props.room.state.hats],
-            rabbits: [...props.room.state.rabbits],
             currentPlayer: props.room.state.currentPlayer,
             timeLeft: props.room.state.timeLeft,
             announcement: props.room.state.announcement
@@ -37,7 +34,7 @@ const GameComponent: React.FC<GameProps> = (props) => {
 
     useEffect(() => {
         props.room.onStateChange((state) => {
-            console.log('state changed', state);
+            console.log('game state changed', state);
             setGameState(copyColyseusState());
         });
 
@@ -48,9 +45,9 @@ const GameComponent: React.FC<GameProps> = (props) => {
         props.room.send('nextTurn');
     };
 
-    const handleSwapStacks = (i: number, j: number) => {
-        console.log(`swap stacks ${i} and ${j}`)
-        props.room.send('swapStacks', {i, j});
+    const handleHatSelected = (i: number) => {
+        console.log(`hat ${i} selected`);
+        props.room.send('selectHat', {i});
     };
     const handleSwapHats = (i: number, j: number) => {
         console.log(`swap hats ${i} and ${j}`)
@@ -67,12 +64,9 @@ const GameComponent: React.FC<GameProps> = (props) => {
             <Timer time={gameState.timeLeft}/>
             <Playground
                 room={props.room}
-                hats={gameState.hats}
-                rabbits={gameState.rabbits}
-                onSwapStacks={handleSwapStacks}
-                onSwapHats={handleSwapHats}
+                onSwapStacks={() => {
+                }}
                 onFlipStack={handleFlipStack}
-
             />
             <Controls
                 onEndTurn={handleNextTurn}

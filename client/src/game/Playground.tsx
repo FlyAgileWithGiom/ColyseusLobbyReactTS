@@ -4,129 +4,79 @@ import {Room} from "colyseus.js";
 
 interface PlaygroundProps {
     room: Room
-    hats: number[];
-    rabbits: number[];
     onSwapStacks: (from: number, to: number) => void;
-    onSwapHats: (from: number, to: number) => void;
     onFlipStack: (stackNumber: number) => void;
 }
 
+interface BoardStateItf {
+    action: string | null,
+    hats: number[],
+    rabbits: number[],
+    selectedHats: [number],
+    selectedStacks: [number],
+    flippedStacks: number
+}
+
+function cloneBoardState(state: BoardStateItf) {
+    return {
+        hats: [...state.hats],
+        rabbits: [...state.rabbits],
+        selectedHats: [...state.selectedHats],
+        selectedStacks: [...state.selectedStacks],
+        flippedStacks: state.flippedStacks
+    }
+}
+
 const Playground: React.FC<PlaygroundProps> = (props) => {
-    const [firstSwappedHat1, setFirstSwappedHat1] = useState<number | null>(null);
-    const [firstSwappedHat2, setFirstSwappedHat2] = useState<number | null>(null);
-    const [firstSwappedStack1, setFirstSwappedStack1] = useState<number | null>(null);
-    const [firstSwappedStack2, setFirstSwappedStack2] = useState<number | null>(null);
-    const [flippedStack, setFlippedStack] = useState<number | null>(null);
+    const [boardState, setBoardState] = useState<any>(cloneBoardState(props.room.state));
     const [swapping, setSwapping] = useState<boolean>(false);
 
+    // synchronise the board state with the room state
     useEffect(() => {
-        props.room.onMessage("hatsSwapped", () => {
-            setSwapping(true)
-        })
-        props.room.onMessage("stackSwapped", () => {
-            setSwapping(true)
+        props.room.onStateChange((state) => {
+            console.log('playground state changed', state);
+            setBoardState(cloneBoardState(state));
         })
     }, [])
 
-    useEffect(() => {
-        setTimeout(() => {
-            resetSwapHats()
-            setSwapping(false)
-        }, 500)
-    }, [swapping])
-
-    function triggerSwapHats(i: number, j: number) {
-        setTimeout(() => {
-            props.onSwapHats(i, j);
-        }, 500);
-        // resetSwapHats()
-        // resetSwapStacks()
-    }
-
-    function triggerSwapStack(i: number, j: number) {
-        props.onSwapStacks(i, j);
-        // resetSwapHats()
-        // resetSwapStacks()
-    }
-
-    function resetSwapHats() {
-        setFirstSwappedHat1(null)
-        setFirstSwappedHat2(null)
-    }
-
-    function resetSwapStacks() {
-        setFirstSwappedStack1(null)
-        setFirstSwappedStack2(null)
-    }
-
-
-    const handleSwapHat = (number: number) => {
-        // cancel other action
-        resetSwapStacks();
-
-        // first clicked
-        if (firstSwappedHat1 === null) {
-            setFirstSwappedHat1(number);
-        } else {
-            // second clicked,
-            // ignore same hat
-            if (number === firstSwappedHat1)
-                return;
-            // validate swap and reset
-            setFirstSwappedHat2(number)
-            // // wait 500ms before triggering swap to allow animation to finish
-            // setTimeout(() => {
-            //     resetSwapHats()
-            triggerSwapHats(firstSwappedHat1, number);
-            // }, 500);
-        }
+    const handleSelectHat = (number: number) => {
+        props.room.send('selectHat', {i: number})
     }
 
     const handleSwapStack = (number: number) => {
-        // cancel other action
-        resetSwapHats();
-
-        // first clicked
-        if (firstSwappedStack1 === null) {
-            setFirstSwappedStack1(number);
-        } else {
-            // second clicked,
-            // ignore same stack
-            if (number === firstSwappedStack1)
-                return;
-            // validate swap and reset
-            setFirstSwappedStack2(number)
-            triggerSwapStack(firstSwappedStack1, number);
-        }
+        props.room.send('selectStack', {i: number})
     }
 
     const handleFlip = (number: number) => {
-        setFlippedStack(number)
-        props.onFlipStack(number);
+        props.room.send('flipStack', {stackNumber: number})
     }
 
     function isHatSelected(i: number) {
-        return (firstSwappedHat1 !== null && firstSwappedHat1 === i) || (firstSwappedHat2 !== null && firstSwappedHat2 === i);
+        return i !== null && boardState.selectedHats.includes(i);
     }
 
     function isStackSelected(i: number) {
-        return firstSwappedStack1 !== null && (firstSwappedStack1 === i || firstSwappedStack2 === i);
+        return i !== null && boardState.selectedStacks.includes(i);
+    }
+
+    function isStackFlipped(i: number) {
+        return i !== null && boardState.flippedStacks !== i;
     }
 
     return (
         <div className="flex flex-row my-20">
             {
-                Array.from({length: props.hats.length}, (_, i) => (
+                Array.from({length: boardState.hats.length}, (_, i) => (
                     <div className="">
-
                         <Stack
                             key={i}
-                            hatNumber={props.hats[i]}
-                            rabbitNumber={props.rabbits[i]}
-                            onHatSelect={() => handleSwapHat(i)}
+                            hatNumber={boardState.hats[i]}
+                            rabbitNumber={boardState.rabbits[i]}
+                            onHatSelect={() => handleSelectHat(i)}
                             onStackSelect={() => handleSwapStack(i)}
                             onFlip={() => handleFlip(i)}
-                            flipped={flippedStack === i}
+                            // TODO technically these should be mutually exclusive
+                            flipped={isStackFlipped(i)}
                             hatSelected={isHatSelected(i)}
                             stackSelected={isStackSelected(i)}
                             swapping={swapping}

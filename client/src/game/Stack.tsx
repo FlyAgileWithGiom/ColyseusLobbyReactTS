@@ -72,7 +72,8 @@ const Stack: React.FC<StackProps> = (props) => {
             <div
                 className={`transition ease-in-out duration-500 \
                 ${stackUp ? '-translate-y-10' : ' translate-y-0'}\
-                ${stackMarked ? 'outline-blue-500' : ''}
+                ${stackMarked ? 'outline-blue-500' : ''}\
+                
             `}>
                 <Rabbit number={props.rabbitNumber} flipped={!props.flipped}/>
             </div>
