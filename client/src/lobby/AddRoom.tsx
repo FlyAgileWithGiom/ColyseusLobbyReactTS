@@ -1,16 +1,25 @@
 import React, {useState} from 'react';
+import {animals, colors, Config, uniqueNamesGenerator} from "unique-names-generator";
+
+const config: Config = {
+    dictionaries: [colors, animals]
+}
+
+function generateRoomName() {
+    return uniqueNamesGenerator(config);
+}
 
 interface AddRoomProps {
     onAddRoom: (title: string) => void;
 }
 
 const AddRoom: React.FC<AddRoomProps> = ({onAddRoom}) => {
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState(generateRoomName());
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         onAddRoom(title);
-        setTitle("");
+        setTitle(generateRoomName());
     };
 
     return (
