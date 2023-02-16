@@ -112,7 +112,7 @@ const Lobby: React.FC<Props> = ({colyseusClient, onStartGame}) => {
         joinedRoom?.send("startCmd");
     };
     return (
-        <div className="flex flex-col items-center justify-around m-20">
+        <div className="flex flex-col items-center justify-center m-20">
             <NameDisplay initialName={playerName} onConfirmNameChange={handleDefinePlayer}/>
             <div className="flex flex-col items-center justify-around m-20">
                 <RoomsList

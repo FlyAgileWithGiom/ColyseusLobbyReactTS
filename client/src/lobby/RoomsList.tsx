@@ -16,7 +16,7 @@ const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin
             <h2>Available Rooms:</h2>
             <table>
                 <thead>
-                <tr>
+                <tr className="text-left">
                     <th>Room</th>
                     <th>Players</th>
                 </tr>
@@ -25,10 +25,7 @@ const RoomsList: React.FC<RoomsListProps> = ({availableRooms, joinedRoom, onJoin
                 {availableRooms.map((room) => (
                     <tr key={room.roomId}>
                         <td>{room.metadata?.title || room.roomId}</td>
-                        {/*<td>{room.clients}</td>*/}
-                        {room.metadata?.players && room.metadata.players.map((player: string) => (
-                            <td>{player}</td>
-                        ))}
+                        <td>{room.metadata?.players?.join(', ')}</td>
 
                         <td>
                             {joinedRoom && joinedRoom.id === room.roomId ? (
