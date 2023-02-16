@@ -6,7 +6,7 @@ interface GameExampleProps {
     room: Room;
 }
 
-const GameExample: React.FC<GameExampleProps> = ({client, room}) => {
+const GameExample: React.FC<GameExampleProps> = ({room}) => {
     useEffect(() => {
         room.onStateChange((state) => {
             console.log('Room state changed!', state);

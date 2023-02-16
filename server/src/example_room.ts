@@ -21,7 +21,7 @@ export class ExampleRoom extends Room<State> {
                 updateLobby(this);
             }
         )
-        this.onMessage('startCmd', (client, message) => {
+        this.onMessage('startCmd', () => {
             console.log(`starting room ${this.roomId}`);
             this.broadcast('start', `we're starting the game with ${[...this.state.players.values()].join(', ')}`);
         })
