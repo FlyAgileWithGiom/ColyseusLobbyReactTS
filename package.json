@@ -1,0 +1,24 @@
+{
+  "name": "colyseus-lobby",
+  "version": "0.9.1",
+  "description": "component for a react lobby for colyseus multiplayer, client and server package",
+  "workspaces": [
+    "client",
+    "server",
+    "components/lobby/client",
+    "components/lobby/server"
+  ],
+  "private": true,
+  "scripts": {
+    "client:install": "npm --prefix client install",
+    "server:install": "npm --prefix server install",
+    "install-all": "npm run client:install && npm run server:install",
+    "start-all:dev": "concurrently \"npm run --prefix server start:dev\" \"npm run --prefix client dev\"",
+    "components:build": "npm --prefix components/lobby/client run build && npm --prefix components/lobby/server run build",
+    "build:client": "npm --prefix components/lobby/client run build",
+    "build:server": "npm --prefix components/lobby/server run build"
+  },
+    "devDependencies": {
+        "concurrently": "^5.3.0"
+    }
+}
