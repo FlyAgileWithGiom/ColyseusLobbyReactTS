@@ -6,7 +6,7 @@ interface GameExampleProps {
     room: Room;
 }
 
-const GameExample: React.FC<GameExampleProps> = ({client, room}) => {
+const GameExample: React.FC<GameExampleProps> = ({room}) => {
     useEffect(() => {
         room.onStateChange((state) => {
             console.log('Room state changed!', state);
@@ -20,7 +20,7 @@ const GameExample: React.FC<GameExampleProps> = ({client, room}) => {
         <div>
             <h3>Room ID: {room.id}</h3>
             <h3>Title: {room.state.title}</h3>
-            <h3>Current Player: {room.sessionId}</h3>
+            <h3>Current Player: {room.state.players[room.sessionId]}</h3>
             <h3>Players: {[...room.state.players.values()].join(', ')}</h3>
         </div>
     );
