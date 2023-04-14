@@ -1,5 +1,5 @@
 {
-  "name": "react-lobby",
+  "name": "react-colyseus-lobby",
   "version": "1.0.0",
   "type": "module",
   "description": "Colyseus Lobby react component (with TailwindCSS, Typescript)",
@@ -9,7 +9,6 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "dist",
     "README.md",
     "LICENSE",
     "CHANGELOG.md",

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import Lobby from "./lobby/Lobby";
 import {Client, Room} from "colyseus.js";
 import GameComponent from "./game/GameComponent";
+import {Lobby} from "react-colyseus-lobby";
 
 const hostname = window.location.hostname;
 

@@ -28,6 +28,7 @@
   "dependencies": {
     "colyseus.js": "^0.14.13",
     "lodash": "^4.17.21",
+    "react-colyseus-lobby": "^1.0.0",
     "unique-names-generator": "^4.7.1"
   }
 }

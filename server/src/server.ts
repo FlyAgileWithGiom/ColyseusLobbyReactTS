@@ -1,5 +1,5 @@
 import {LobbyRoom, Server} from "colyseus"
-import {RabbitHatsGameRoom} from "./RabbitHatsRoom";
+import {ExampleRoom} from "./example_room";
 
 const port = parseInt(process.env.PORT, 10) || 3000
 
@@ -13,5 +13,5 @@ gameServer
 
 // Expose your game room with realtime listing enabled.
 gameServer
-    .define("rabbit_game", RabbitHatsGameRoom, {maxClients: 4})
+    .define("rabbit_game", ExampleRoom, {maxClients: 4})
     .enableRealtimeListing();
