@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import {Client, Room} from "colyseus.js";
-import GameComponent from "./game/GameComponent";
-import {Lobby} from "react-colyseus-lobby";
+import {Lobby} from "react-colyseus-lobby.js";
+import {GameExample} from "./game_example/GameExample";
+
+
 
 const hostname = window.location.hostname;
 
@@ -16,7 +18,7 @@ const App: React.FC = () => {
 
     return game == null
         ? <Lobby colyseusClient={colyseusClient} onStartGame={handleStartGame}/>
-        : <GameComponent colyseus={colyseusClient} room={game!}></GameComponent>;
+        : <GameExample colyseus={colyseusClient} room={game!}></GameExample>;
 };
 
 export default App;

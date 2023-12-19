@@ -2,11 +2,11 @@ import React, {useEffect} from 'react';
 import {Client, Room} from 'colyseus.js';
 
 interface GameExampleProps {
-    client: Client;
+    colyseus: Client;
     room: Room;
 }
 
-const GameExample: React.FC<GameExampleProps> = ({room}) => {
+export const GameExample: React.FC<GameExampleProps> = ({room}) => {
     useEffect(() => {
         room.onStateChange((state) => {
             console.log('Room state changed!', state);

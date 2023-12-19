@@ -4,10 +4,10 @@
   "type": "module",
   "description": "React TypeScript on Replit, using Vite bundler",
   "scripts": {
-    "dev": "vite",
+    "start:dev": "vite",
     "build:css": "npx tailwindcss -i ./src/input.css -o ./dist/output.css",
     "build": "tsc && npx tailwindcss -i ./src/input.css -o ./dist/output.css && vite build",
-    "preview": "vite preview"
+    "start:preview": "vite preview"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +28,6 @@
   "dependencies": {
     "colyseus.js": "^0.14.13",
     "lodash": "^4.17.21",
-    "react-colyseus-lobby": "^1.0.0",
     "unique-names-generator": "^4.7.1"
   }
 }
