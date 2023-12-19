@@ -1,0 +1,8 @@
+{
+  "target": "esnext",
+  "compilerOptions": {
+      "experimentalDecorators": true
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
