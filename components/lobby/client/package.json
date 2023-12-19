@@ -1,6 +1,7 @@
 {
-  "name": "react-colyseus-lobby",
+  "name": "react-colyseus-lobby.js",
   "version": "1.0.0",
+  "main": "dist/index.js",
   "type": "module",
   "description": "Colyseus Lobby react component (with TailwindCSS, Typescript)",
   "scripts": {
