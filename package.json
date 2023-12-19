@@ -3,8 +3,8 @@
   "version": "0.9.1",
   "description": "component for a react lobby for colyseus multiplayer, client and server package",
   "workspaces": [
-    "tests/client",
-    "tests/server",
+    "example/client",
+    "example/server",
     "components/lobby/client",
     "components/lobby/server"
   ],
