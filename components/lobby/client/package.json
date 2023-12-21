@@ -1,5 +1,5 @@
 {
-  "name": "react-colyseus-lobby.js",
+  "name": "colyseus-lobby-react.js",
   "version": "1.0.0",
   "main": "dist/index.js",
   "type": "module",

@@ -2,8 +2,10 @@ import {Client, Room, updateLobby} from "colyseus";
 import {MapSchema, Schema, type} from "@colyseus/schema";
 
 class State extends Schema {
-    @type("string") title: string;
-    @type({map: "string"}) players: MapSchema<string> = new MapSchema<string>();
+    @type("string")
+    title: string;
+    @type({map: "string"})
+    players: MapSchema<string> = new MapSchema<string>();
 }
 
 export class ExampleRoom extends Room<State> {
