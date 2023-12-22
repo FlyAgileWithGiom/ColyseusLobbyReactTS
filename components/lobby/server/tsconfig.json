@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ESNext"],
-    "target": "ESNext",
+    "rootDir": "src",
+    "module": "commonjs",
+    "lib": ["es2020"],
+    "target": "es2020",
     "declaration": true,
     "removeComments": true,
     "noImplicitAny": false,
     "experimentalDecorators": true,
+    "moduleResolution": "Node",
     "sourceMap": true,
     "esModuleInterop": true,
     "strict": true,
+    "strictNullChecks": false,
     "allowJs": false,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist"
+    "useDefineForClassFields": true
   },
-  "include": ["src/"]
+  "include": ["src/"],
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,11 +1,21 @@
 {
   "compilerOptions": {
-      "experimentalDecorators": true
+    "experimentalDecorators": true
   },
-  "include": ["src"],
+  "outDir": "dist/",
+  "rootDir": "src/",
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "composite": true,
-  "module": "ESNext",
+  "module": "es2020",
   "moduleResolution": "Node",
+  "declaration": true,
+  "sourceMap": true,
   "allowSyntheticDefaultImports": true,
   "experimentalDecorators": true,
   "allowJs": false,
@@ -18,5 +28,6 @@
   "moduleResolution": "Node",
   "resolveJsonModule": true,
   "isolatedModules": true,
-  "noEmit": true
+  "noEmit": true,
+  "target": "esnext"
 }

@@ -1,29 +1,32 @@
 {
-  "name": "colyseus-lobby-room",
+  "name": "colyseus-teams-lobby",
   "version": "1.0.0",
-  "type": "module",
-  "description": "Colyseus component to complement colyseus-react-lobby on the server side",
+  "main": "dist/index.js",
+  "description": "Colyseus component to complement colyseus-teams-lobby on the server side",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf dist"
   },
   "files": [
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "src/lobby/**/*",
-    "src/index.ts",
-    "src/input.css"
+    "src/**/*",
+    "src/index.ts"
   ],
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "typescript": "^4.7.4",
-    "typescript-language-server": "^0.11.2"
+    "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@colyseus/monitor": "^0.14.22",
+    "@colyseus/schema": "^1.0.45",
+    "@colyseus/social": "^0.11.7",
+    "colyseus": "^0.14.24",
     "lodash": "^4.17.21",
     "unique-names-generator": "^4.7.1"
   }

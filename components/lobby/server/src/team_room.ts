@@ -1,22 +1,26 @@
-import {Client, Room, updateLobby} from "colyseus";
+import {Client, Room, updateLobby} from "@colyseus/core";
 import {MapSchema, Schema, type} from "@colyseus/schema";
 
-class State extends Schema {
+export class TeamState extends Schema {
     @type("string")
     title: string;
     @type({map: "string"})
     players: MapSchema<string> = new MapSchema<string>();
 }
 
-export class ExampleRoom extends Room<State> {
+export class TeamRoom<T extends TeamState> extends Room<T> {
+
+    constructor(private stateType: new () => T) {
+        super();
+    }
 
     onCreate({title}: any) {
-        this.setState(new State())
-        console.log(`Example game ${title} room created!`);
+        this.setState(new this.stateType())
         this.state.title = title;
         this.setMetadata({
             title: title, players: []
         }).then(() => {
+            console.log(`Example game ${title} room created!`);
             updateLobby(this);
         })
         this.onMessage('startCmd', () => {
@@ -43,8 +47,6 @@ export class ExampleRoom extends Room<State> {
         this.state.players[client.sessionId] = playerName;
         this.metadata.players.push(`${playerName}`);
         updateLobby(this);
-
         console.log(`${this.roomId}: ${playerName} joined!`);
     }
-
 }
