@@ -1,6 +1,6 @@
 {
-  "name": "colyseus-lobby-react",
-  "version": "0.9.1",
+  "name": "colyseus-teams-project",
+  "version": "1.0.0",
   "description": "component for a react lobby for colyseus multiplayer, client and server package",
   "workspaces": [
     "example/client",
@@ -10,13 +10,26 @@
   ],
   "private": true,
   "scripts": {
-    "client:install": "npm --prefix tests/client install",
-    "server:install": "npm --prefix tests/server install",
-    "install-all": "npm run client:install && npm run server:install",
-    "start-all:dev": "concurrently \\\"npm run --prefix server start:dev\\\" \\\"npm run --prefix tests/client dev\\\"",
-    "components:build": "npm --prefix components/lobby/client run build && npm --prefix components/lobby/server run build",
+    "example:client:install": "npm --prefix example/client install",
+    "example:server:install": "npm --prefix tests/server install",
+    "example:install": "npm run example:client:install && npm run example:server:install",
+    "example:start:dev": "concurrently \"npm run --prefix example/server start:dev\" \"npm run --prefix example/client start:dev\"",
+    "build:all": "npm run build:client && npm run build:server",
+    "install:client": "npm --prefix components/lobby/client install",
+    "install:server": "npm --prefix components/lobby/server install",
+    "install:all": "npm run install:client && npm run install:server",
     "build:client": "npm --prefix components/lobby/client run build",
-    "build:server": "npm --prefix components/lobby/server run build"
+    "build:server": "npm --prefix components/lobby/server run build",
+    "build:example": "npm --prefix example/client run build && npm --prefix example/server run build",
+    "link:client": "npm --prefix components/lobby/client link",
+    "link:server": "npm --prefix components/lobby/server link",
+    "link:all": "npm run link:client && npm run link:server",
+    "link:example": "npm --prefix example/client link colyseus-teams-lobby-react.js && npm --prefix example/server link colyseus-teams-lobby",
+    "clean:client": "npm --prefix components/lobby/client run clean",
+    "clean:server": "npm --prefix components/lobby/server run clean",
+    "clean:all": "npm run clean:client && npm run clean:server",
+    "clean:example": "npm --prefix example/client run clean && npm --prefix example/server run clean",
+    "clean:hard": "rm -rf node_modules && rm -rf components/lobby/client/node_modules && rm -rf components/lobby/server/node_modules && rm -rf example/client/node_modules && rm -rf example/server/node_modules"
   },
   "devDependencies": {
     "concurrently": "^5.3.0"
