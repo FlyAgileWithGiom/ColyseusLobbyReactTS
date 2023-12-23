@@ -2,8 +2,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "target": "ESNext",
-    "module": "commonjs",
-    "moduleResolution": "Node",
+//    "module": "commonjs",
+    "moduleResolution": "node",
     "useDefineForClassFields": true,
     "strict": true,
     "allowJs": true,
@@ -12,7 +12,6 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": false,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "declaration": true,
     "sourceMap": true,

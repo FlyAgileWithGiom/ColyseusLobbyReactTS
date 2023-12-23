@@ -14,7 +14,7 @@
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "src/lobby/**/*",
+    "src/**/*",
     "src/index.ts",
     "src/input.css"
   ],
