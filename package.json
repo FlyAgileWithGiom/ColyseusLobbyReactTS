@@ -3,19 +3,17 @@
   "version": "1.0.0",
   "description": "component for a react lobby for colyseus multiplayer, client and server package",
   "workspaces": [
-    "example/client",
-    "example/server",
-    "components/lobby/client",
-    "components/lobby/server"
+    "client/package/colyseus-teams-lobby-react.js",
+    "client/example"
   ],
   "private": true,
   "scripts": {
-    "example:client:install": "npm --prefix example/client install",
-    "example:server:install": "npm --prefix tests/server install",
+    "client:example:install": "npm --prefix client/example install",
+    "example:server:install": "npm --prefix example/server install",
     "example:install": "npm run example:client:install && npm run example:server:install",
-    "example:start:dev": "concurrently \"npm run --prefix example/server start:dev\" \"npm run --prefix example/client start:dev\"",
+    "example:start:dev": "concurrently \"npm run --prefix example/server start:dev\" \"npm run --prefix client/example start:dev\"",
     "build:all": "npm run build:client && npm run build:server",
-    "install:client": "npm --prefix components/lobby/client install",
+    "install:client": "npm --prefix client install",
     "install:server": "npm --prefix components/lobby/server install",
     "install:all": "npm run install:client && npm run install:server",
     "build:client": "npm --prefix components/lobby/client run build",
@@ -27,11 +25,8 @@
     "link:example": "npm --prefix example/client link colyseus-teams-lobby-react.js && npm --prefix example/server link colyseus-teams-lobby",
     "clean:client": "npm --prefix components/lobby/client run clean",
     "clean:server": "npm --prefix components/lobby/server run clean",
-    "clean:all": "npm run clean:client && npm run clean:server",
-    "clean:example": "npm --prefix example/client run clean && npm --prefix example/server run clean",
+    "clean:all": "npm run clean --workspaces",
+    "clean:example": "npm --prefix client run clean && npm --prefix example/server run clean",
     "clean:hard": "rm -rf node_modules && rm -rf components/lobby/client/node_modules && rm -rf components/lobby/server/node_modules && rm -rf example/client/node_modules && rm -rf example/server/node_modules"
-  },
-  "devDependencies": {
-    "concurrently": "^5.3.0"
   }
 }

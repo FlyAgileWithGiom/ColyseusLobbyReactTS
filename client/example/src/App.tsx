@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {Client, Room} from "colyseus.js";
-import {Lobby} from "react-colyseus-lobby.js";
+
 import {GameExample} from "./game_example/GameExample";
+import {Lobby} from "colyseus-teams-lobby-react.js";
 
 
 
